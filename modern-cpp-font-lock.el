@@ -103,6 +103,26 @@ http://en.cppreference.com/w/cpp/language/attributes"
                  (repeat string))
   :group 'modern-c++-font-lock)
 
+(defcustom modern-c++-containers
+  (eval-when-compile
+    (sort '("array" "vector" "deque" "forward_list" "list" "set" "map" "multiset" "multimap" "unordered_set" "unordered_map" "unordered_multiset" "unordered_multimap" "stack" "queue" "priority_queue")
+          'modern-c++-string-lenght>))
+  "List of C++ attributes. See doc:
+http://en.cppreference.com/w/cpp/language/attributes"
+  :type '(choice (const :tag "Disabled" nil)
+                 (repeat string))
+  :group 'modern-c++-font-lock)
+
+(defcustom modern-c++-algorithms
+  (eval-when-compile
+    (sort '("all_of" "any_of" "none_of" "for_each" "for_each_n" "count" "count_if" "mismatch" "equal" "find" "find_if" "find_if_not" "find_end" "find_first_of" "adjacent_find" "search" "search_n" "copy" "copy_if" "copy_n" "copy_backward" "move" "move_backward" "fill" "fill_n" "transform" "generate" "generate_n" "remove" "remove_if" "remove_copy" "remove_copy_if" "replace" "replace_if" "replace_copy" "replace_copy_if" "swap" "swap_ranges" "iter_swap" "reverse" "reverse_copy" "rotate" "rotate_copy" "random_shuffle" "shuffle" "sample" "unique" "unique_copy" "is_partitioned" "partition" "partition_copy" "stable_partition" "partition_point" "is_sorted" "is_sorted_until" "sort" "partial_sort" "partial_sort_copy" "stable_sort" "nth_element" "lower_bound" "upper_bound" "binary_search" "equal_range" "merge" "inplace_merge" "includes" "set_difference" "set_intersection" "set_symmetric_difference" "set_union" "is_heap" "is_heap_until" "make_heap" "push_heap" "pop_heap" "sort_heap" "max" "max_element" "min" "min_element" "minmax" "clamp" "lexicographical_compare" "is_permutation" "next_permutation" "prev_permutation" "iota" "accumulate" "inner_product" "adjacent_difference" "partial_sum" "reduce" "exclusive_scan" "inclusive_scan" "transform_reduce" "transform_exclusive_scan" "transform_inclusive_scan" "uninitialized_copy" "uninitialized_copy_n" "uninitialized_fill" "uninitialized_fill_n" "uninitialized_move" "uninitialized_move_n" "uninitialized_default_contruct" "uninitialized_default_construct_n" "uninitialized_value_construct" "uninitialized_value_construct_n" "destroy_at" "destroy" "destroy_n" "qsort" "bsearch" "memset")
+          'modern-c++-string-lenght>))
+  "List of C++ algorithms. See doc:
+http://en.cppreference.com/w/cpp/algorithm"
+  :type '(choice (const :tag "Disabled" nil)
+                 (repeat string))
+  :group 'modern-c++-font-lock)
+
 (defcustom modern-c++-operators
   (eval-when-compile
     (sort '("...")
@@ -122,8 +142,9 @@ http://en.cppreference.com/w/cpp/language/operators"
   (let ((types-regexp (regexp-opt modern-c++-types 'symbols))
         (preprocessors-regexp (regexp-opt modern-c++-preprocessors))
         (keywords-regexp (regexp-opt modern-c++-keywords 'words))
-        (attributes-regexp
-         (concat "\\[\\[\\(" (regexp-opt modern-c++-attributes 'words) "\\).*\\]\\]"))
+        (containers-regexp (regexp-opt modern-c++-containers 'words))
+        (attributes-regexp (concat "\\[\\[\\(" (regexp-opt modern-c++-attributes 'words) "\\).*\\]\\]"))
+        (algorithms-regexp (regexp-opt modern-c++-algorithms 'words))
         (operators-regexp (regexp-opt modern-c++-operators)))
     (setq modern-c++-font-lock-keywords
           `(
@@ -133,6 +154,8 @@ http://en.cppreference.com/w/cpp/language/operators"
             (,preprocessors-regexp (0 font-lock-preprocessor-face))
             (,attributes-regexp (1 font-lock-constant-face))
             (,operators-regexp (0 font-lock-function-name-face))
+            (,containers-regexp (0 font-lock-keyword-face))
+            (,algorithms-regexp (0 font-lock-keyword-face))
             (,keywords-regexp (0 font-lock-keyword-face))))))
 
 (defcustom modern-c++-literal-boolean
